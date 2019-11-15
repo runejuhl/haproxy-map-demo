@@ -1,0 +1,17 @@
+---
+version: "3.3"
+
+services:
+  haproxy:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./haproxy/:/usr/local/etc/haproxy/:ro
+      - ./nginx/:/etc/nginx/:ro
+      - ./certs/:/etc/ssl/private/:ro
+    ports:
+      - 8080:80
+      - 8443:443
+      - 8001:8001
+      - 8002:8002

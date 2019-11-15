@@ -1,0 +1,65 @@
+* Using Haproxy maps to select backend, force HTTPS and set HSTS header
+
+It's possible to use string maps to simplify Haproxy configuration files. Map
+files are read on startup and its values stored in a tree for fast lookups.
+
+This example uses map files to
+
++ select backend
++ force redirect to HTTPS based on domain
++ set HSTS header
+
+** Example
+
+#+BEGIN_SRC sh
+  ./test.sh
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+  --------------------------------------------------------------------------------
+  $ curl -siH Host: hello.example.org http://localhost:8080
+
+  HTTP/1.1 200 OK
+  Date: Fri, 15 Nov 2019 09:33:53 GMT
+  Content-Type: text/plain
+  Content-Length: 7
+  Request-Header-Host: hello.example.org
+  Request-Backend-Found: be_hello
+  
+  hello!
+  --------------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+  $ curl -skiH Host: hello.example.org https://localhost:8443
+
+  HTTP/1.1 200 OK
+  Date: Fri, 15 Nov 2019 09:33:53 GMT
+  Content-Type: text/plain
+  Content-Length: 7
+  Request-Header-Host: hello.example.org
+  Request-Backend-Found: be_hello
+  Strict-Transport-Security: include_subdomains; preload; max-age=31536000;
+  
+  hello!
+  --------------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+  $ curl -siH Host: world.example.org http://localhost:8080
+
+  HTTP/1.1 302 Found
+  Cache-Control: no-cache
+  Content-length: 0
+  Location: https://world.example.org/
+  
+  --------------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+  $ curl -skiH Host: world.example.org https://localhost:8443
+
+  HTTP/1.1 200 OK
+  Date: Fri, 15 Nov 2019 09:33:53 GMT
+  Content-Type: text/plain
+  Content-Length: 7
+  Request-Header-Host: world.example.org
+  Request-Backend-Found: be_world
+  
+  world!
+  --------------------------------------------------------------------------------
+#+END_EXAMPLE

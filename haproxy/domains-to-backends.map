@@ -1,0 +1,4 @@
+# -*- mode: conf-space; -*-
+
+hello.example.org        be_hello
+world.example.org        be_world
