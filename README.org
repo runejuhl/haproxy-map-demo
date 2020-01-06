@@ -63,3 +63,10 @@ This example uses map files to
   world!
   --------------------------------------------------------------------------------
 #+END_EXAMPLE
+
+** Stats
+The stats page can be accessed on [[http://localhost:63661/haproxy?stats]].
+
+#+CAPTION: Example HAProxy stats page after running ~siege~
+
+[[./haproxy-stats.png]]
