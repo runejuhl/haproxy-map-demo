@@ -1,4 +1,4 @@
-FROM haproxy:1.8
+FROM haproxy:2.1.2
 
 RUN apt-get update && \
   apt-get install -y busybox-syslogd nginx-light && \
